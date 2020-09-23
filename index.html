@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tic_Toe</title>
+</head>
+<body>
+<style>
+body
+{
+    display: flex;
+    justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+  
+}
+
+table
+{
+    border: 10PX solid plum;
+    border-radius: 7PX;
+    border-spacing: 20PX;
+}
+*{
+    background-color: black;
+    color: blue;
+    text-align: center;
+}
+.btn{
+    width: 80px;
+    height: 40px;
+    background-color: aliceblue;
+    font-size: xx-large;
+    text-align: center;
+}
+
+.start_btn
+{
+    width: 180px;
+    height: 70px;
+    background-color: aliceblue;
+    font-size: xx-large;
+    text-align: center;
+    color: blue;
+}
+
+.turn
+{
+    width:fit-content;
+    height: 70px;
+    font-size: xx-large;
+    color:greenyellow;
+    font-weight: bolder;
+    display: flex;
+    text-align: center;
+
+}
+
+#players_name
+{
+    width: 180px;
+    height: 70px;
+    font-size: xx-large;
+    color:antiquewhite;
+    font-weight: bolder;
+    text-align: center;
+    align-content: center;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+#player
+{
+    width: 180px;
+    height: 70px;
+    font-size: xx-large;
+    text-align: center;
+    color: greenyellow;
+    font-weight: bolder;
+    text-align: center;
+    align-items: center;
+}
+
+#display_result
+{
+    text-align: center;
+    font-weight: bolder;
+    font-size: 100px;
+}
+
+#restart
+{
+
+    border: 10px solid gold;
+    border-radius: 20px;
+}
+
+</style>
+<h1>Tic_Toe</h1>
+   
+ <table id="table">
+ </table>
+ <br/>
+ <br/>
+
+
+ <div id="players_name">
+
+    <div>
+    <label for="player1">player1-name:</label><br>
+    <input style="font-size: xx-large; color: aqua;" type="text" id="player1" name="player1"><br>
+    </div>
+    <div>
+    <label  for="player2">player2-name:</label><br>
+    <input style="font-size: xx-large; color: aqua;" type="text" id="player2" name="player2">
+    </div>
+</div>
+
+ <div class="start">
+  <button class="start_btn" id="start_btn" onclick="start()">START</button>
+  </div>
+
+  <div class="turn"  style="color: aqua;">
+    <h1 id="player">
+
+    </h1>
+ </div>
+
+  <div id="display_result"  style="color: aqua;">
+  </div>
+  <button class="start_btn" id="restart" onclick="RESTART()" style="width: 200px;height: 150px;visibility: hidden;">
+    WANT TO PLAY AGAIN
+</button>
+ <script>
+              
+
+var cnt=1,ch="X",player1="",player2="";
+
+for(let i=1;i<=3;i++)
+     {
+        let row=document.getElementById('table').insertRow(i-1);
+         for(let j=1;j<=3;j++)
+         {
+            var input = document.createElement("INPUT");
+                    input.setAttribute("type", "text");
+                    input.setAttribute("maxlength","1");
+//                    input.setAttribute("pattern","[X]+[O]");
+                    input.setAttribute("disabled","true");
+            input.className="btn";
+           input.onchange=check;
+            input.id=cnt;
+           // console.log(Btn.id); 
+
+            var cell = row.insertCell(j-1);
+             cell.appendChild(input);  
+             cnt++;
+         }
+     } 
+    
+    function start()
+    {
+        
+      //  document.getElementById("players_name").style.visibility="visible";
+          
+        if(document.getElementById("player1").value==""||document.getElementById("player2").value=="")
+        {
+            alert("Please Enter Both Player's Name");
+            return;
+        }
+
+        document.getElementById("player").style.visibility="visible";
+        ch="X";
+
+        for(let i=1;i<=9;i++)
+    document.getElementById(i+"").disabled=false;
+        
+         document.getElementById("players_name").style.visibility="hidden";
+         document.getElementById("start_btn").style.visibility="hidden";
+
+         player1=document.getElementById("player1").value;
+         player2= document.getElementById("player2").value;
+
+        player=player1;
+        document.getElementById("display_result").innerHTML="";    
+        
+        let display=`Turn: ${player} X`;
+
+        document.getElementById("player").innerHTML=display;
+    }
+
+    function check()
+    {
+        let player="";
+        var input= document.getElementById(this.id).value;
+        if(input!=ch)
+        {
+             alert("Allowed character "+ch+"only please enter only asssined character  to you");
+             document.getElementById(this.id).value="";
+             return;
+        }
+        else
+        {
+            document.getElementById(this.id).disabled=true;
+
+            if(result()==true)
+              return;
+            if(ch=="X")
+            {
+            ch="O";
+            player=player2;
+            }
+            else
+            {
+                ch="X";
+               player=player1;
+            }   
+
+            let display=`Turn: ${player} ${(ch)}`;
+            document.getElementById("player").innerHTML=display;
+        }
+    }
+         
+         function result()
+        {
+             
+             let box=[];
+
+             for(i=1;i<=9;i++)
+             box[i-1]=document.getElementById(i+"").value;
+            
+            for(let i=0;i<3;i++)
+            {
+             if(box[i*3].length==1&&box[i*3]==box[i*3+1]&&box[i*3+1]==box[i*3+2])
+                {
+                    display_result(box[i*3]);
+                    return true;
+                }
+
+                if(box[i].length==1&&box[i]==box[i+3]&&box[i+3]==box[i+6])
+                  {
+                      display_result(box[i]);
+                      return true;
+                  }
+            }
+
+         if(box[0].length==1&&box[0]==box[4]&&box[4]==box[8])
+                {
+                    display_result(box[0]);
+                    return true;
+                }
+
+          if(box[2].length==1&&box[2]==box[4]&&box[4]==box[6])
+                {
+                    display_result(box[2]);
+                       return true;
+                }
+
+                for(let i=0;i<9;i++)
+                {
+                    if(box[i].length==0)
+                    return false;
+
+                }   
+                
+                display_result("draw");
+            return true;
+        }
+
+        function display_result(rslt)
+        {
+           
+           console.log(rslt);
+         
+            document.getElementById("display_result").style.visibility="visible";
+            document.getElementById("restart").style.visibility="visible";
+            document.getElementById("player").style.visibility="hidden"; 
+
+
+            for(let i=1;i<=9;i++)
+        document.getElementById(i+"").disabled=true;
+        
+
+           console.log(rslt);         
+         let player=player1;
+         if(rslt=="X"||rslt=="O")
+         {
+             if(rslt=="O")
+             player=player2;
+             document.getElementById("display_result").innerHTML="Congartulation  "+player+" You Won";
+         }          
+            else
+            {
+              document.getElementById("display_result").innerHTML="GAME-DRAWN";
+            }
+          
+              return;
+        }
+
+        function RESTART()
+        {
+             document.getElementById("display_result").style.visibility="hidden";
+             document.getElementById("restart").style.visibility="hidden";
+
+             document.getElementById("start_btn").style.visibility="visible";
+             document.getElementById("players_name").style.visibility="visible";
+
+             for(let i=1;i<=9;i++)
+            {  
+               document.getElementById(i+"").value="";
+               document.getElementById(i+"").disabled=true;
+            }
+            document.getElementById("player1").value="";
+            document.getElementById("player2").value="";
+
+            return;
+        }
+
+
+ </script>
+</body>
+</html>
